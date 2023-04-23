@@ -1,14 +1,14 @@
 import request from '@/utils/request'
 
-export function login(username, password, code, uuid) {
+export function login(username, password, captcha) {
   return request({
-    url: 'auth/login',
+    url: 'admin/login',
+    // url: 'auth/login',
     method: 'post',
     data: {
       username,
       password,
-      code,
-      uuid
+      captcha
     }
   })
 }
@@ -16,6 +16,13 @@ export function login(username, password, code, uuid) {
 export function getInfo() {
   return request({
     url: 'auth/info',
+    method: 'get'
+  })
+}
+
+export function getCaptCha() {
+  return request({
+    url: 'admin/captcha',
     method: 'get'
   })
 }

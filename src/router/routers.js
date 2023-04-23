@@ -16,8 +16,17 @@ export const constantRouterMap = [
     hidden: true
   },
   {
+    path: '/testhome',
+    component: (resolve) => require(['@/views/testhome'], resolve),
+    hidden: true
+  },
+  {
     path: '/401',
     component: (resolve) => require(['@/views/features/401'], resolve),
+    hidden: true
+  },
+  { path: '*',
+    redirect: '/404',
     hidden: true
   },
   {

@@ -15,11 +15,11 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="code">
-        <el-input v-model="loginForm.code" auto-complete="off" placeholder="验证码" style="width: 63%" @keyup.enter.native="handleLogin">
+        <el-input v-model="loginForm.captcha" auto-complete="off" placeholder="验证码" style="width: 63%" @keyup.enter.native="handleLogin">
           <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
         </el-input>
-        <div class="login-code">
-          <img :src="codeUrl" @click="getCode">
+        <div class="login-code" @click="getCode" v-html="codeUrl">
+          <!-- <img :src="codeUrl" @click="getCode"> -->
         </div>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
@@ -42,9 +42,9 @@
 </template>
 
 <script>
-import { encrypt } from '@/utils/rsaEncrypt'
+// import { encrypt } from '@/utils/rsaEncrypt'
 import Config from '@/settings'
-import { getCodeImg } from '@/api/login'
+import { getCaptCha } from '@/api/login'
 import Cookies from 'js-cookie'
 import qs from 'qs'
 import Background from '@/assets/images/background.webp'
@@ -59,13 +59,13 @@ export default {
         username: 'admin',
         password: '123456',
         rememberMe: false,
-        code: '',
+        captcha: '',
         uuid: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
         password: [{ required: true, trigger: 'blur', message: '密码不能为空' }],
-        code: [{ required: true, trigger: 'change', message: '验证码不能为空' }]
+        captcha: [{ required: true, trigger: 'change', message: '验证码不能为空' }]
       },
       loading: false,
       redirect: undefined
@@ -96,9 +96,9 @@ export default {
   },
   methods: {
     getCode() {
-      getCodeImg().then(res => {
-        this.codeUrl = res.img
-        this.loginForm.uuid = res.uuid
+      getCaptCha().then(res => {
+        this.codeUrl = res
+        // this.loginForm.uuid = res.uuid
       })
     },
     getCookie() {
@@ -112,7 +112,7 @@ export default {
         username: username === undefined ? this.loginForm.username : username,
         password: password,
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
-        code: ''
+        captcha: ''
       }
     },
     handleLogin() {
@@ -121,12 +121,12 @@ export default {
           username: this.loginForm.username,
           password: this.loginForm.password,
           rememberMe: this.loginForm.rememberMe,
-          code: this.loginForm.code,
-          uuid: this.loginForm.uuid
+          captcha: this.loginForm.captcha
+          // uuid: this.loginForm.uuid
         }
-        if (user.password !== this.cookiePass) {
-          user.password = encrypt(user.password)
-        }
+        // if (user.password !== this.cookiePass) {
+        //   user.password = encrypt(user.password)
+        // }
         if (valid) {
           this.loading = true
           if (user.rememberMe) {
@@ -203,10 +203,12 @@ export default {
   }
   .login-code {
     width: 33%;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 38px;
     float: right;
-    img{
+    img {
       cursor: pointer;
       vertical-align:middle
     }
