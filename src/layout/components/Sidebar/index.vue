@@ -23,12 +23,18 @@ import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/assets/styles/variables.scss'
+import { constantRouterMap } from '@/router/routers'
 
 export default {
   components: { SidebarItem, Logo },
+  data() {
+    return {
+      sidebarRouters: constantRouterMap
+    }
+  },
   computed: {
     ...mapGetters([
-      'sidebarRouters',
+      // 'sidebarRouters',
       'sidebar'
     ]),
     activeMenu() {
@@ -49,6 +55,9 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  mounted() {
+    console.log('Here', this.sidebarRouters)
   }
 }
 </script>

@@ -16,6 +16,7 @@ export default {
     const { icon, title } = context.props
     const vnodes = []
 
+    console.log(context.props)
     if (icon) {
       vnodes.push(<svg-icon icon-class={icon}/>)
     }
